@@ -1,9 +1,19 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  Renderer2,
+} from '@angular/core';
 
 @Directive({
   selector: '[appStyle]',
 })
 export class StyleDirective {
+  @Input('checkColor') color: string = 'red';
+
+  @Input('allStyles') allStyles: { border: string; fontWeight: string } | any;
+
   constructor(private elRef: ElementRef, private r: Renderer2) {
     // console.log(elRef);
     //!1 первый способ написания стилей
@@ -20,6 +30,13 @@ export class StyleDirective {
   }
 
   @HostListener('mouseenter') onEnter() {
+    this.r.setStyle(this.elRef.nativeElement, 'border', this.allStyles?.border);
+    this.r.setStyle(
+      this.elRef.nativeElement,
+      'fontWeight',
+      this.allStyles?.fontWeight
+    );
+    this.r.setStyle(this.elRef.nativeElement, 'color', this.color);
     this.r.setStyle(this.elRef.nativeElement, 'color', 'blue');
   }
 
